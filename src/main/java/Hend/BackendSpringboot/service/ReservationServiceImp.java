@@ -36,6 +36,8 @@ public class ReservationServiceImp implements IReservationService {
         return reservationRepository.findById(reservationId).get();
     }
 
+
+    //add reservation
     @Override
     public Reservation AffecterRessourceAEquipe(Reservation r, Long  idRessource, Long idEquipe) {
         EquipeIntervention equipe = equipeInterventionRepository.findById(idEquipe).get();

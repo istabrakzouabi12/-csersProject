@@ -1,11 +1,14 @@
 package Hend.BackendSpringboot.service;
 
 import Hend.BackendSpringboot.entity.Ressource;
+import Hend.BackendSpringboot.entity.User;
 import Hend.BackendSpringboot.entity.etatRessource;
 import Hend.BackendSpringboot.repository.RessourceRepository;
+import Hend.BackendSpringboot.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,8 +22,12 @@ import java.util.Map;
 public class RessourceServiceImp implements IRessourceService {
     @Autowired
     RessourceRepository ressourceRepository;
-
+    @Autowired
+    UserRepository userRepository;
+    @Autowired
+    SendEmailRessourceService sendEmailRessourceService;
     @Override
+   @Scheduled(cron = "*/60 * * * * *")
     public List<Ressource> retrieveAllRessources() {
         List<Ressource> allRessources = ressourceRepository.findAll();
         List<Ressource> validRessource = new ArrayList<>();
@@ -31,10 +38,18 @@ public class RessourceServiceImp implements IRessourceService {
 
             ){
                 validRessource.add(re);
+
+            } if (re.getTotalQuantite()<2) {
+                sendEmailRessourceService.sendEmail(re.getUser().getEmail(),"RESSOURCE" + re.getNomRessource()+" WILL BE OVER SOON ",
+                        "Dear "+re.getUser().getFirstname()+" "+re.getUser().getLastname()+"\n"+"WE NEED TO UPDATE THE QUANTITY  << "+re.getTotalQuantite()+" >> OF RESSOURCE \n");
+
             }
+
         }
         return validRessource;
+
     }
+
 
     @Override
     public List<Ressource> retrieveAllRessourcesback() {
@@ -47,7 +62,8 @@ public class RessourceServiceImp implements IRessourceService {
     }
 
     @Override
-    public Ressource addRessource(Ressource r) {
+    public Ressource addRessource(Ressource r,Long userId) {
+        User user=userRepository.findById(userId).get();
 
         List<Ressource> allRessources= ressourceRepository.findAll();
         for (Ressource re : allRessources) {
@@ -63,6 +79,8 @@ public class RessourceServiceImp implements IRessourceService {
             throw new RuntimeException("quantite ne doit pas etre negative") ;
         }
         r.setArchive(false);
+        r.setUser(user);
+        r.setEtatRessource(etatRessource.DISPONIBLE);
       return  ressourceRepository.save(r);
     }
 

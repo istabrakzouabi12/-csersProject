@@ -11,7 +11,7 @@ public interface IRessourceService {
     public List<Ressource> retrieveAllRessourcesback();
 
     public Ressource retrieveRessource(Long ressourceId);
-    public Ressource addRessource(Ressource r);
+    public Ressource addRessource(Ressource r, Long userId);
     public Ressource archiveRessource(Long ressourceId);
     public Ressource modifyRessource(Ressource r);
     public HashMap<String, Double> TypeRessourceByQuantity();

@@ -40,6 +40,10 @@ public class User  {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     private List<Inscription> inscriptions;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private List<Ressource> ressources;
+
 
 
 

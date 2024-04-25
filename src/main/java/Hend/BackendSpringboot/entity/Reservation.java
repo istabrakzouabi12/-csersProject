@@ -36,8 +36,9 @@ public class Reservation {
     @JsonIgnore
     private Ressource ressource;
 
- // NoSQL
-    private Integer idUser;
+
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "M-d-yyyy")
     private LocalDate dateReservation;
+
+
 }

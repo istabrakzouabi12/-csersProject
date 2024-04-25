@@ -15,9 +15,9 @@ import java.util.List;
 public class RessourceRestController {
     IRessourceService ressourceService;
     // http://localhost:8089/csers/ressource/add-ressource
-    @PostMapping("/add-ressource")
-    public Ressource addRessource(@RequestBody Ressource r) {
-        Ressource ressource = ressourceService.addRessource(r);
+    @PostMapping("/add-ressource/{userId}")
+    public Ressource addRessource(@RequestBody Ressource r, @PathVariable("userId") Long userId) {
+        Ressource ressource = ressourceService.addRessource(r,userId);
         return ressource;
     }
     // http://localhost:8089/csers/ressource/retrieve-all-ressources

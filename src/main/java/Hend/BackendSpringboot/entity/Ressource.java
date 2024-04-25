@@ -46,6 +46,9 @@ public class Ressource {
     @Enumerated(EnumType.STRING)
     private etatRessource etatRessource;
 
+    @ManyToOne(cascade = CascadeType.ALL)
+    private User user;
+
 
 
 }
